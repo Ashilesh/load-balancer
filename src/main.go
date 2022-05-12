@@ -8,6 +8,8 @@ import (
 	"net"
 
 	"github.com/Ashilesh/balancer/src/algo"
+	"github.com/Ashilesh/balancer/src/utils"
+	// "github.com/Ashilesh/balancer/src/utils"
 )
 
 func main() {
@@ -22,29 +24,27 @@ func main() {
 
 	defer ln.Close()
 
-	// TODO: use interface so any algo can be used
-	// ch := algo.GetConsistetnHash()
-	// node := algo.GetNode("https://localhost:8080")
+	consistentHash := algo.GetAlgo()
+	consistentHash.Add("256")
+	consistentHash.Add("afdfa")
+	consistentHash.Add("4fnore")
 
-	// ch.Add(node)
-	// ch.GetArray()
+	fmt.Println(consistentHash)
 
-	// node = algo.GetNode("2")
-	// ch.Add(node)
-	// ch.GetArray()
+	consistentHash.Delete("3")
 
-	// node = algo.GetNode("10")
-	// ch.Add(node)
-	// ch.GetArray()
+	fmt.Println(consistentHash)
 
-	// node = algo.GetNode("4")
-	// ch.Add(node)
-	// ch.GetArray()
+	consistentHash.Add("localhost:1")
+	consistentHash.Add("localhost:2")
+	consistentHash.Add("localhost:3")
 
-	// node = algo.GetNode("5")
-	// ch.Add(node)
-	// ch.GetArray()
+	fmt.Println(consistentHash.GetUrl("eewr"))
+	fmt.Println(consistentHash.GetUrl("localho"))
 
+	fmt.Println(consistentHash)
+	fmt.Println(utils.GetHash("eewr"))
+	fmt.Println(utils.GetHash("localho"))
 	// for {
 	// 	conn, err := ln.Accept()
 	// 	if err != nil {
