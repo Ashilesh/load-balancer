@@ -2,10 +2,9 @@ package algo
 
 import (
 	"fmt"
+	"github.com/Ashilesh/balancer/src/utils"
 	"math/rand"
 	"sort"
-
-	"github.com/Ashilesh/balancer/src/utils"
 )
 
 type Algo interface {
@@ -20,7 +19,7 @@ func GetAlgo() Algo {
 }
 
 type Node struct {
-	id        uint32 // hash
+	id        uint8 // hash
 	url       string
 	strHashed string // url+some random no if collission
 }
@@ -29,13 +28,14 @@ func GetNode(url string) *Node {
 	return &Node{utils.GetHash(url), url, url}
 }
 
+// TODO: make it singleton
 type ConsistentHash struct {
-	arr  []uint32
-	dict map[uint32]Node
+	arr  []uint8
+	dict map[uint8]Node
 }
 
 func GetConsistetnHash() *ConsistentHash {
-	return &ConsistentHash{[]uint32{}, map[uint32]Node{}}
+	return &ConsistentHash{[]uint8{}, map[uint8]Node{}}
 }
 
 func (c *ConsistentHash) Add(url string) {
@@ -61,14 +61,14 @@ func (c *ConsistentHash) Add(url string) {
 }
 
 func (c *ConsistentHash) Delete(modifiedUrl string) {
-	if ind, exist := utils.Search(c.arr, utils.GetHash(modifiedUrl)); exist {
+	if ind, exist := utils.BinarySearch(c.arr, utils.GetHash(modifiedUrl)); exist {
 		c.arr = append(c.arr[:ind], c.arr[ind+1:]...)
 		delete(c.dict, utils.GetHash(modifiedUrl))
 	}
 }
 
 func (c *ConsistentHash) GetUrl(clientIP string) string {
-	ind, _ := utils.Search(c.arr, utils.GetHash(clientIP))
+	ind, _ := utils.BinarySearch(c.arr, utils.GetHash(clientIP))
 
 	if ind < 0 {
 		panic("0 Nodes available")

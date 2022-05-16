@@ -22,3 +22,34 @@ func Search[T constraints.Ordered](arr []T, searchVal T) (int, bool) {
 	}
 	return i - 1, false
 }
+
+func BinarySearch[T constraints.Ordered](arr []T, searchVal T) (int, bool) {
+	start := 0
+	end := len(arr) - 1
+
+	for start < end {
+
+		mid := (start + end) / 2
+
+		if arr[mid] == searchVal {
+			return mid, true
+		}
+
+		if arr[mid] > searchVal {
+			end = mid - 1
+		} else if arr[mid] < searchVal {
+			start = mid + 1
+		}
+	}
+
+	if arr[start] == searchVal {
+		return start, true
+	} else if searchVal < arr[start] {
+		if start == 0 {
+			return len(arr) - 1, false
+		}
+		return start - 1, false
+	}
+
+	return start, false
+}
