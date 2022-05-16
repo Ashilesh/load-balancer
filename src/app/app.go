@@ -2,12 +2,23 @@ package app
 
 import (
 	"fmt"
+	"github.com/Ashilesh/balancer/src/config"
+	"github.com/Ashilesh/balancer/src/utils"
 	"io"
 	"net"
 )
 
+var configuration config.Configuration
+
 func Run() {
-	createServer()
+	// TODO: create struct to store strings for command fields ex. config = "-config"
+	arg, err := utils.GetCmdArgs("-config")
+	if err != nil {
+		panic("Configuration file path argument not found")
+	}
+
+	fmt.Println(arg)
+	// createServer()
 }
 
 func createServer() {
