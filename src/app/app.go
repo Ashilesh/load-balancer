@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"github.com/Ashilesh/balancer/src/config"
-	"github.com/Ashilesh/balancer/src/utils"
 	"io"
 	"net"
 )
@@ -11,21 +10,14 @@ import (
 var configuration config.Configuration
 
 func Run() {
-	// TODO: create struct to store strings for command fields ex. config = "-config"
-	arg, err := utils.GetCmdArgs("-config")
-	if err != nil {
-		panic("Configuration file path argument not found")
-	}
 
-	fmt.Println(arg)
-	// createServer()
+	configuration = config.GetConfig()
+	createServer()
 }
 
 func createServer() {
-	networkType := "tcp"
-	addr := "127.0.0.1:8080"
 
-	ln, err := net.Listen(networkType, addr)
+	ln, err := net.Listen(configuration.NetworkType, configuration.Host)
 	if err != nil {
 		panic("ERROR: unable to listen")
 	}

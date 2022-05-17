@@ -7,17 +7,6 @@ import (
 	"sort"
 )
 
-type Algo interface {
-	Add(string)
-	Delete(string)
-	GetUrl(string) string
-}
-
-// TODO: pass algo type in params
-func GetAlgo() Algo {
-	return GetConsistetnHash()
-}
-
 type Node struct {
 	id        uint8 // hash
 	url       string
@@ -34,8 +23,14 @@ type ConsistentHash struct {
 	dict map[uint8]Node
 }
 
+var consistentHashAlgo *ConsistentHash
+
 func GetConsistetnHash() *ConsistentHash {
-	return &ConsistentHash{[]uint8{}, map[uint8]Node{}}
+	if consistentHashAlgo != nil {
+		return consistentHashAlgo
+	}
+	consistentHashAlgo = &ConsistentHash{[]uint8{}, map[uint8]Node{}}
+	return consistentHashAlgo
 }
 
 func (c *ConsistentHash) Add(url string) {
