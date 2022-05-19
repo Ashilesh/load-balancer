@@ -4,7 +4,6 @@
     "networkType": "tcp",
     "persistentConnection": true,
     "nodes": [
-        "1",
-        "2"
+        "localhost:7071"
     ]
 }

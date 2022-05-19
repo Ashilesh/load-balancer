@@ -2,22 +2,34 @@ package app
 
 import (
 	"fmt"
-	"github.com/Ashilesh/balancer/src/config"
 	"io"
 	"net"
+
+	"github.com/Ashilesh/balancer/src/algo"
+	"github.com/Ashilesh/balancer/src/config"
 )
 
 var configuration config.Configuration
+var balancingAlgo algo.Algo
+
+func init() {
+	configuration = config.GetConfig()
+	balancingAlgo = algo.GetAlgo()
+
+	for _, url := range configuration.Nodes {
+		balancingAlgo.Add(url)
+	}
+}
 
 func Run() {
-
-	configuration = config.GetConfig()
 	createServer()
 }
 
 func createServer() {
 
-	ln, err := net.Listen(configuration.NetworkType, configuration.Host)
+	fmt.Println("networkType : ", configuration.NetworkType)
+	fmt.Println("host: ", configuration.Host)
+	ln, err := net.Listen(configuration.NetworkType, configuration.Host+":"+configuration.Port)
 	if err != nil {
 		panic("ERROR: unable to listen")
 	}
@@ -34,7 +46,9 @@ func createServer() {
 }
 
 func handleConnection(conn net.Conn) {
-	target, err := net.Dial("tcp", ":7071")
+	nodeUrl := balancingAlgo.GetUrl(conn.RemoteAddr().String())
+	fmt.Println("INFO: Redirecting to", nodeUrl)
+	target, err := net.Dial(configuration.NetworkType, nodeUrl)
 	if err != nil {
 		panic(err)
 	}

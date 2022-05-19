@@ -17,7 +17,6 @@ func GetNode(url string) *Node {
 	return &Node{utils.GetHash(url), url, url}
 }
 
-// TODO: make it singleton
 type ConsistentHash struct {
 	arr  []uint8
 	dict map[uint8]Node
