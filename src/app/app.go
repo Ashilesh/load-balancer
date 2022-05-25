@@ -2,11 +2,11 @@ package app
 
 import (
 	"fmt"
-	"io"
 	"net"
 
 	"github.com/Ashilesh/balancer/src/algo"
 	"github.com/Ashilesh/balancer/src/config"
+	"github.com/Ashilesh/balancer/src/protocol"
 )
 
 var configuration config.Configuration
@@ -45,28 +45,12 @@ func createServer() {
 	}
 }
 
-func handleConnection(conn net.Conn) {
-	nodeUrl := balancingAlgo.GetUrl(conn.RemoteAddr().String())
+func handleConnection(clientConn net.Conn) {
+	fmt.Println("client IP: ", clientConn.RemoteAddr().String())
+	nodeUrl := balancingAlgo.GetUrl(clientConn.RemoteAddr().String())
 	fmt.Println("INFO: Redirecting to", nodeUrl)
-	target, err := net.Dial(configuration.NetworkType, nodeUrl)
-	if err != nil {
-		panic(err)
-	}
 
-	go func(target, conn net.Conn) {
-		fmt.Println("sending data to server")
-		_, err := io.Copy(target, conn)
-		if err != nil {
-			fmt.Println("error while copying to target", err)
-		}
-	}(target, conn)
+	proto := protocol.GetProto(configuration.Protocol)
 
-	// use channel to communicate and close connections
-	go func() {
-		fmt.Println("receiving data from server")
-		_, err := io.Copy(conn, target)
-		if err != nil {
-			fmt.Println("error while copying to client")
-		}
-	}()
+	proto.CreateDuplexConnection(clientConn, nodeUrl)
 }

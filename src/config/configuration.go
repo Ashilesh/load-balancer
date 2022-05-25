@@ -11,6 +11,7 @@ var config *Configuration
 type Configuration struct {
 	Host                 string   `json:"host"`
 	Port                 string   `json:"port"`
+	Protocol             string   `json:"protocol"`
 	NetworkType          string   `json:"networkType"`
 	PersistentConnection bool     `json:"persistentConnection"`
 	Nodes                []string `json:"nodes"`
@@ -22,12 +23,12 @@ func GetConfig() Configuration {
 	}
 
 	c := createNewConfig()
-	setConfig(&c)
+	setConfig(c)
 
 	return *config
 }
 
-func createNewConfig() Configuration {
+func createNewConfig() *Configuration {
 	// TODO: create struct to store strings for command fields ex. config = "-config"
 	arg, err := utils.GetCmdArgs("-config")
 	if err != nil {
@@ -48,7 +49,7 @@ func createNewConfig() Configuration {
 		panic("cannot decode config file")
 	}
 
-	return configuration
+	return &configuration
 }
 
 func setConfig(conf *Configuration) {
