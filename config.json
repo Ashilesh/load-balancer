@@ -1,10 +1,10 @@
 {
     "host": "127.0.0.1",
     "port": "8080",
-    "protocol": "websocket",
+    "protocol": "http",
     "networkType": "tcp",
     "persistentConnection": true,
     "nodes": [
-        "localhost:7071"
+        "localhost:8088"
     ]
 }
