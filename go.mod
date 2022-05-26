@@ -1,4 +1,4 @@
-module github.com/Ashilesh/balancer
+module github.com/Ashilesh/load-balancer
 
 go 1.18
 

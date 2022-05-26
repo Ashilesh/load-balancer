@@ -2,7 +2,7 @@ package algo
 
 import (
 	"fmt"
-	"github.com/Ashilesh/balancer/src/utils"
+	"github.com/Ashilesh/load-balancer/src/utils"
 	"math/rand"
 	"sort"
 )
