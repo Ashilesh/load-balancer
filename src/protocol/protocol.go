@@ -1,6 +1,9 @@
 package protocol
 
-import "net"
+import (
+	"fmt"
+	"net"
+)
 
 type IProtocol interface {
 	CreateDuplexConnection(net.Conn, string)
@@ -9,9 +12,10 @@ type IProtocol interface {
 func GetProto(protocolType string) IProtocol {
 	switch protocolType {
 	case "websocket":
+		fmt.Println("Protocol type: websocket")
 		return GetWebsocketFactory()
-	// TODO: default is http
 	default:
-		return nil
+		fmt.Println("Protocol type: http")
+		return GetHttpFactory()
 	}
 }

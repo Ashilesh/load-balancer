@@ -14,6 +14,8 @@ var balancingAlgo algo.Algo
 
 func init() {
 	configuration = config.GetConfig()
+
+	// TODO: pass algo type from config file
 	balancingAlgo = algo.GetAlgo()
 
 	for _, url := range configuration.Nodes {
