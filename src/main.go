@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Ashilesh/load-balancer/src/app"
+	"github.com/Ashilesh/load-balancer/app"
 )
 
 func main() {

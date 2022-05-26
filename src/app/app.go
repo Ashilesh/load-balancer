@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/Ashilesh/load-balancer/src/algo"
-	"github.com/Ashilesh/load-balancer/src/config"
-	"github.com/Ashilesh/load-balancer/src/protocol"
+	"github.com/Ashilesh/load-balancer/algo"
+	"github.com/Ashilesh/load-balancer/config"
+	"github.com/Ashilesh/load-balancer/protocol"
 )
 
 var configuration config.Configuration
