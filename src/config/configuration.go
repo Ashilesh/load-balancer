@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/Ashilesh/load-balancer/src/utils"
+	"github.com/Ashilesh/load-balancer/utils"
 	"os"
 )
 
