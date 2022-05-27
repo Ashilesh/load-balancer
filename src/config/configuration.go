@@ -2,8 +2,10 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/Ashilesh/load-balancer/utils"
 	"os"
+
+	"github.com/Ashilesh/load-balancer/logs"
+	"github.com/Ashilesh/load-balancer/utils"
 )
 
 var config *Configuration
@@ -32,12 +34,12 @@ func createNewConfig() *Configuration {
 	// TODO: create struct to store strings for command fields ex. config = "-config"
 	arg, err := utils.GetCmdArgs("-config")
 	if err != nil {
-		panic("Configuration file path argument not found")
+		logs.Fatal("Configuration file path argument not found")
 	}
 
 	file, err := os.Open(arg)
 	if err != nil {
-		panic("cannot open config file")
+		logs.Fatal("cannot open config file")
 	}
 	defer file.Close()
 
@@ -46,7 +48,7 @@ func createNewConfig() *Configuration {
 	var configuration Configuration
 
 	if err := decoder.Decode(&configuration); err != nil {
-		panic("cannot decode config file")
+		logs.Fatal("cannot decode config file")
 	}
 
 	return &configuration

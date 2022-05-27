@@ -1,9 +1,10 @@
 package protocol
 
 import (
-	"fmt"
 	"io"
 	"net"
+
+	"github.com/Ashilesh/load-balancer/logs"
 )
 
 type Websocket struct {
@@ -17,8 +18,8 @@ func (w *Websocket) Default_values() {
 func (w *Websocket) CreateDuplexConnection(clientConn net.Conn, serverUrl string) {
 	serverConn, err := net.Dial(w.networkType, serverUrl)
 	if err != nil {
-		// TODO: handle error
-		fmt.Println("error", err)
+		// TODO: remove url from structure
+		logs.Error(err)
 		return
 	}
 
@@ -26,28 +27,20 @@ func (w *Websocket) CreateDuplexConnection(clientConn net.Conn, serverUrl string
 	closeConnChan := make(chan int)
 
 	go func() {
-		fmt.Println("sending data to server")
-		count, err := io.Copy(serverConn, clientConn)
-		fmt.Println("client -> server ", count)
+		_, err := io.Copy(serverConn, clientConn)
 		if err != nil {
-			fmt.Println("error while copying to target")
+			logs.Error(err)
 		}
-		// closeConnChan <- 1
-		fmt.Println("client -> server complete")
 	}()
 
 	// use channel to communicate and close connections
 	go func() {
-		// var buf bytes.Buffer
-		fmt.Println("receiving data from server")
-		count, err := io.Copy(clientConn, serverConn)
-		fmt.Println("server -> client ", count)
+		_, err := io.Copy(clientConn, serverConn)
 
 		if err != nil {
-			fmt.Println("error while copying to client")
+			logs.Error(err)
 		}
 		closeConnChan <- 1
-		fmt.Println("server -> client complete")
 
 	}()
 
@@ -57,12 +50,12 @@ func (w *Websocket) CreateDuplexConnection(clientConn net.Conn, serverUrl string
 	serverConn.Close()
 	clientConn.Close()
 
-	fmt.Println("Complete")
+	logs.Info(clientConn.RemoteAddr().String(), "disconnected")
 }
 
 var websocket *Websocket
 
-func GetWebsocketFactory() *Websocket {
+func GetWebsocketProtocol() *Websocket {
 	if websocket != nil {
 		return websocket
 	}

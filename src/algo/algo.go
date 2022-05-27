@@ -7,6 +7,6 @@ type Algo interface {
 }
 
 // TODO: pass algo type in params and make it thread safe
-func GetAlgo() Algo {
+func GetAlgoFactory() Algo {
 	return GetConsistetnHash()
 }
