@@ -1,9 +1,10 @@
 package protocol
 
 import (
-	"fmt"
 	"io"
 	"net"
+
+	"github.com/Ashilesh/load-balancer/logs"
 )
 
 type Http struct {
@@ -17,42 +18,31 @@ func (h *Http) Default_values() {
 func (h *Http) CreateDuplexConnection(clientConn net.Conn, serverUrl string) {
 	serverConn, err := net.Dial(h.networkType, serverUrl)
 	if err != nil {
-		// TODO: handle error
-		fmt.Println("error", err)
+		// TODO: delete node url from structure
+		logs.Error("unable to connect to server", err)
 		return
 	}
 
 	// if server disconnects then send data on this channel
 	closeConnChan := make(chan int)
+	// if client disconnects send data to this channel
 	closeClientConn := make(chan int)
 	go func() {
-		fmt.Println("sending data to server")
-		count, err := io.Copy(serverConn, clientConn)
+		_, err := io.Copy(serverConn, clientConn)
 		closeClientConn <- 2
 		if val := <-closeClientConn; val != 1 {
-			// error msg
-			fmt.Println("error while copying to target", err)
+			logs.Error(err)
 		}
-		fmt.Println("client -> server ", count)
-
-		// closeConnChan <- 1
-		fmt.Println("client -> server complete")
 	}()
 
 	// use channel to communicate and close connections
 	go func() {
-		// var buf bytes.Buffer
-		fmt.Println("receiving data from server")
-		count, err := io.Copy(clientConn, serverConn)
-		fmt.Println("server -> client ", count)
-
+		_, err := io.Copy(clientConn, serverConn)
 		if err != nil {
-			fmt.Println("error while copying to client")
+			logs.Error(err)
 		}
 
 		closeConnChan <- 1
-		fmt.Println("server -> client complete")
-
 	}()
 
 	isServerDisconnected := false
@@ -76,13 +66,12 @@ func (h *Http) CreateDuplexConnection(clientConn net.Conn, serverUrl string) {
 			}
 		}
 	}
-
-	fmt.Println("Complete")
+	logs.Info(clientConn.RemoteAddr().String(), "disconnected")
 }
 
 var http *Http
 
-func GetHttpFactory() *Http {
+func GetHttpProtocol() *Http {
 	if http != nil {
 		return http
 	}

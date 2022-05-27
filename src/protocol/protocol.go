@@ -1,21 +1,22 @@
 package protocol
 
 import (
-	"fmt"
 	"net"
+
+	"github.com/Ashilesh/load-balancer/logs"
 )
 
 type IProtocol interface {
 	CreateDuplexConnection(net.Conn, string)
 }
 
-func GetProto(protocolType string) IProtocol {
+func GetProtoFactory(protocolType string) IProtocol {
 	switch protocolType {
 	case "websocket":
-		fmt.Println("Protocol type: websocket")
-		return GetWebsocketFactory()
+		logs.Info("setting protocol to -> websocket")
+		return GetWebsocketProtocol()
 	default:
-		fmt.Println("Protocol type: http")
-		return GetHttpFactory()
+		logs.Info("setting protocol to -> http")
+		return GetHttpProtocol()
 	}
 }
