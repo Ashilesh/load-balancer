@@ -2,9 +2,11 @@ package algo
 
 import (
 	"fmt"
-	"github.com/Ashilesh/load-balancer/utils"
 	"math/rand"
 	"sort"
+
+	"github.com/Ashilesh/load-balancer/logs"
+	"github.com/Ashilesh/load-balancer/utils"
 )
 
 type Node struct {
@@ -65,7 +67,7 @@ func (c *ConsistentHash) GetUrl(clientIP string) string {
 	ind, _ := utils.BinarySearch(c.arr, utils.GetHash(clientIP))
 
 	if ind < 0 {
-		panic("0 Nodes available")
+		logs.Fatal("0 nodes available")
 	}
 
 	node := c.dict[c.arr[ind]]
