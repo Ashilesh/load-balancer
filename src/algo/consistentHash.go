@@ -9,19 +9,19 @@ import (
 	"github.com/Ashilesh/load-balancer/utils"
 )
 
-type Node struct {
+type serverNode struct {
 	id        uint8 // hash
 	url       string
 	strHashed string // url+some random no if collission
 }
 
-func GetNode(url string) *Node {
-	return &Node{utils.GetHash(url), url, url}
+func getNode(url string) *serverNode {
+	return &serverNode{utils.GetHash(url), url, url}
 }
 
 type ConsistentHash struct {
 	arr  []uint8
-	dict map[uint8]Node
+	dict map[uint8]serverNode
 }
 
 var consistentHashAlgo *ConsistentHash
@@ -30,12 +30,12 @@ func GetConsistetnHash() *ConsistentHash {
 	if consistentHashAlgo != nil {
 		return consistentHashAlgo
 	}
-	consistentHashAlgo = &ConsistentHash{[]uint8{}, map[uint8]Node{}}
+	consistentHashAlgo = &ConsistentHash{[]uint8{}, map[uint8]serverNode{}}
 	return consistentHashAlgo
 }
 
 func (c *ConsistentHash) Add(url string) {
-	node := GetNode(url)
+	node := getNode(url)
 
 	// check if hash for that node already exist
 	for {
@@ -67,6 +67,7 @@ func (c *ConsistentHash) GetUrl(clientIP string) string {
 	ind, _ := utils.BinarySearch(c.arr, utils.GetHash(clientIP))
 
 	if ind < 0 {
+		// TODO: change this implementation when we listen for server status
 		logs.Fatal("0 nodes available")
 	}
 

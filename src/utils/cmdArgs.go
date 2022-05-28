@@ -16,7 +16,7 @@ func GetCmdArgs(field string) (string, error) {
 	}
 
 	if ind >= len(os.Args) || ind == -1 {
-		return "", errors.New("Argument not found")
+		return "", errors.New("argument not found for " + field)
 	}
 
 	return os.Args[ind], nil
