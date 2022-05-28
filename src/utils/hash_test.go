@@ -6,7 +6,7 @@ import (
 
 func TestGetHash(t *testing.T) {
 	data := "test-data"
-	expected := 20
+	expected := 21
 	hash := GetHash(data)
 
 	if hash != uint8(expected) {
