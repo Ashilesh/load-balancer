@@ -20,7 +20,7 @@ jobs:
     - name: Verify dependencies
       run: cd src && go mod verify
 
-    - name: Build
+    - name: Test
       run: cd src && go test -v ./...
   
   build:
