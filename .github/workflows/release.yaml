@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   build:
-    if: github.event.base_ref == 'refs/heads/master'
     
     name: GoReleaser build
     runs-on: ubuntu-latest
