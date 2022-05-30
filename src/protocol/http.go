@@ -30,7 +30,7 @@ func (h *Http) CreateDuplexConnection(clientConn net.Conn, serverUrl string) {
 	go func() {
 		_, err := io.Copy(serverConn, clientConn)
 		closeClientConn <- 2
-		if val := <-closeClientConn; val != 1 {
+		if val := <-closeClientConn; val != 1 && err != nil {
 			logs.Error(err)
 		}
 	}()
