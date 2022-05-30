@@ -8,7 +8,7 @@ A Layer-4 load balancer where you can distribute your workload to different serv
 ## Run Executable
 
 Download proper binaries according to your OS and architecture. You can download binaries from [here](https://github.com/Ashilesh/load-balancer/releases). While 
-running executables you need to pass configuration file as [command line argument](#Command-Line-Arguments). 
+running executables you need to pass configuration file as [command line argument](#Command-Line-Arguments). Ex. For windows you can run executable by `load-balancer.exe -config config.json` where `config.json` is [configuration](#Configuration) file.
 
 
 ## Run Project
