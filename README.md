@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/Ashilesh/load-balancer/actions/workflows/ci.yaml/badge.svg)](https://github.com/Ashilesh/load-balancer/actions/workflows/ci.yaml)
 ![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/Ashilesh/load-balancer?filename=src%2Fgo.mod)
+![Docker Automated build](https://img.shields.io/docker/automated/ashilesh/load-balancer)
 
 A Layer-4 load balancer where you can distribute your workload to different servers.
 
